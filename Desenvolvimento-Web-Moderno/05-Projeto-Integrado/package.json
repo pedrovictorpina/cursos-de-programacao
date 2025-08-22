@@ -1,0 +1,202 @@
+{
+  "name": "ecommerce-fullstack",
+  "version": "1.0.0",
+  "description": "Projeto integrado de e-commerce full-stack - Módulo 5 do Curso de Desenvolvimento Web Moderno",
+  "main": "index.js",
+  "private": true,
+  "workspaces": [
+    "frontend",
+    "backend",
+    "shared"
+  ],
+  "scripts": {
+    "dev": "concurrently \"npm run dev:backend\" \"npm run dev:frontend\"",
+    "dev:frontend": "cd frontend && npm run dev",
+    "dev:backend": "cd backend && npm run dev",
+    "dev:full": "docker-compose -f docker-compose.dev.yml up",
+    "build": "npm run build:shared && npm run build:frontend && npm run build:backend",
+    "build:frontend": "cd frontend && npm run build",
+    "build:backend": "cd backend && npm run build",
+    "build:shared": "cd shared && npm run build",
+    "test": "npm run test:backend && npm run test:frontend",
+    "test:backend": "cd backend && npm run test",
+    "test:frontend": "cd frontend && npm run test",
+    "test:e2e": "cd frontend && npm run test:e2e",
+    "test:coverage": "npm run test:coverage:backend && npm run test:coverage:frontend",
+    "test:coverage:backend": "cd backend && npm run test:coverage",
+    "test:coverage:frontend": "cd frontend && npm run test:coverage",
+    "lint": "npm run lint:backend && npm run lint:frontend",
+    "lint:backend": "cd backend && npm run lint",
+    "lint:frontend": "cd frontend && npm run lint",
+    "lint:fix": "npm run lint:fix:backend && npm run lint:fix:frontend",
+    "lint:fix:backend": "cd backend && npm run lint:fix",
+    "lint:fix:frontend": "cd frontend && npm run lint:fix",
+    "type-check": "npm run type-check:backend && npm run type-check:frontend",
+    "type-check:backend": "cd backend && npm run type-check",
+    "type-check:frontend": "cd frontend && npm run type-check",
+    "db:migrate": "cd backend && npm run db:migrate",
+    "db:seed": "cd backend && npm run db:seed",
+    "db:reset": "cd backend && npm run db:reset",
+    "db:studio": "cd backend && npm run db:studio",
+    "docker:build": "docker-compose build",
+    "docker:up": "docker-compose up -d",
+    "docker:down": "docker-compose down",
+    "docker:logs": "docker-compose logs -f",
+    "docker:clean": "docker-compose down -v --remove-orphans && docker system prune -f",
+    "deploy:staging": "./scripts/deploy.sh staging",
+    "deploy:production": "./scripts/deploy.sh production",
+    "backup": "./scripts/backup.sh",
+    "restore": "./scripts/restore.sh",
+    "setup": "npm install && npm run setup:env && npm run docker:up && npm run db:migrate && npm run db:seed",
+    "setup:env": "cp .env.example .env && cp frontend/.env.example frontend/.env && cp backend/.env.example backend/.env",
+    "clean": "npm run clean:deps && npm run clean:build",
+    "clean:deps": "rm -rf node_modules frontend/node_modules backend/node_modules shared/node_modules",
+    "clean:build": "rm -rf frontend/dist backend/dist shared/dist",
+    "security:audit": "npm audit --audit-level=moderate",
+    "security:fix": "npm audit fix",
+    "security:check": "npm run security:check:backend && npm run security:check:frontend",
+    "security:check:backend": "cd backend && npm run security:check",
+    "security:check:frontend": "cd frontend && npm run security:check",
+    "docs": "npm run docs:backend && npm run docs:frontend",
+    "docs:backend": "cd backend && npm run docs",
+    "docs:frontend": "cd frontend && npm run docs",
+    "monitor": "docker-compose -f docker-compose.monitoring.yml up -d",
+    "monitor:down": "docker-compose -f docker-compose.monitoring.yml down",
+    "health": "curl -f http://localhost:3001/health && curl -f http://localhost:3000",
+    "logs": "docker-compose logs -f app",
+    "logs:backend": "docker-compose logs -f backend",
+    "logs:frontend": "docker-compose logs -f frontend",
+    "performance": "npm run performance:backend && npm run performance:frontend",
+    "performance:backend": "cd backend && npm run performance",
+    "performance:frontend": "cd frontend && npm run performance"
+  },
+  "keywords": [
+    "ecommerce",
+    "fullstack",
+    "react",
+    "nodejs",
+    "typescript",
+    "prisma",
+    "postgresql",
+    "redis",
+    "elasticsearch",
+    "stripe",
+    "docker",
+    "ci-cd",
+    "monitoring",
+    "microservices"
+  ],
+  "author": {
+    "name": "Curso Desenvolvimento Web Moderno",
+    "email": "contato@cursoweb.com",
+    "url": "https://github.com/curso-web-moderno"
+  },
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/curso-web-moderno/ecommerce-fullstack.git"
+  },
+  "bugs": {
+    "url": "https://github.com/curso-web-moderno/ecommerce-fullstack/issues"
+  },
+  "homepage": "https://github.com/curso-web-moderno/ecommerce-fullstack#readme",
+  "engines": {
+    "node": ">=18.0.0",
+    "npm": ">=8.0.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20.10.0",
+    "@typescript-eslint/eslint-plugin": "^6.13.0",
+    "@typescript-eslint/parser": "^6.13.0",
+    "concurrently": "^8.2.2",
+    "cross-env": "^7.0.3",
+    "eslint": "^8.54.0",
+    "eslint-config-prettier": "^9.0.0",
+    "eslint-plugin-import": "^2.29.0",
+    "eslint-plugin-node": "^11.1.0",
+    "eslint-plugin-prettier": "^5.0.1",
+    "husky": "^8.0.3",
+    "lint-staged": "^15.1.0",
+    "prettier": "^3.1.0",
+    "typescript": "^5.3.2"
+  },
+  "dependencies": {
+    "dotenv": "^16.3.1"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged",
+      "pre-push": "npm run test && npm run type-check"
+    }
+  },
+  "lint-staged": {
+    "*.{js,jsx,ts,tsx}": [
+      "eslint --fix",
+      "prettier --write"
+    ],
+    "*.{json,md,yml,yaml}": [
+      "prettier --write"
+    ]
+  },
+  "config": {
+    "commitizen": {
+      "path": "./node_modules/cz-conventional-changelog"
+    }
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  },
+  "volta": {
+    "node": "18.18.2",
+    "npm": "9.8.1"
+  },
+  "packageManager": "npm@9.8.1",
+  "overrides": {
+    "semver": "^7.5.4"
+  },
+  "funding": {
+    "type": "github",
+    "url": "https://github.com/sponsors/curso-web-moderno"
+  },
+  "contributors": [
+    {
+      "name": "Professor Frontend",
+      "email": "frontend@cursoweb.com",
+      "role": "Frontend Specialist"
+    },
+    {
+      "name": "Professor Backend",
+      "email": "backend@cursoweb.com",
+      "role": "Backend Specialist"
+    },
+    {
+      "name": "Professor DevOps",
+      "email": "devops@cursoweb.com",
+      "role": "DevOps Specialist"
+    }
+  ],
+  "directories": {
+    "doc": "docs",
+    "test": "tests"
+  },
+  "files": [
+    "frontend/",
+    "backend/",
+    "shared/",
+    "infrastructure/",
+    "scripts/",
+    "docs/",
+    "README.md",
+    "LICENSE",
+    ".env.example"
+  ]
+}
